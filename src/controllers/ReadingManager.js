@@ -46,29 +46,34 @@ export class ReadingManager {
         });
     }
 
-    deleteReading(id) {
-        this.readings = this.readings.filter(reading => reading.id !== parseInt(id));
-    }
-
     validateReadings(readings) {
-        // Filter out incomplete readings
-        const completeReadings = readings.filter(reading => reading.date && reading.kwh);
-        
         const errors = [];
+        let hasError = false;
 
-        if (completeReadings.length < 2) {
+        readings.forEach(reading => {
+            if (!reading.date || !reading.kwh) {
+                errors.push(reading.id);
+                hasError = true;
+            }
+        });
+
+        if (hasError) {
             return {
                 isValid: false,
-                message: 'Please enter at least two complete readings to calculate averages.',
+                message: 'Please fill in all fields.',
+                errors
+            };
+        }
+
+        if (readings.length < 2) {
+            return {
+                isValid: false,
+                message: 'Please enter at least two readings.',
                 errors: []
             };
         }
 
-        return { 
-            isValid: true, 
-            errors: [],
-            completeReadings: completeReadings
-        };
+        return { isValid: true, errors: [] };
     }
 
     highlightErrors(errorIds) {
