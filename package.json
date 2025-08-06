@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "serve .",
+    "build": "echo 'No explicit build step needed for this static site. Files are served directly from the root directory.'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
