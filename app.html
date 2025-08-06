@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity Usage Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* -- Modern UI Styles -- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .animated-card {
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform: translateY(30px);
+            opacity: 0;
+        }
+        .animated-card.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .loader {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid #818cf8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* -- Reactive Coloring for Results -- */
+        .usage-low { border-left-color: #22c55e; }
+        .usage-medium { border-left-color: #f59e0b; }
+        .usage-high { border-left-color: #ef4444; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-indigo-100 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-2xl">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">
+                Energy Insights
+            </h1>
+            <p class="text-gray-600 mt-3">Calculate your usage and get AI-powered tips to save.</p>
+        </header>
+
+        <main class="glass-card p-6 sm:p-8 rounded-2xl shadow-xl">
+            <div id="readings-container">
+                <!-- Reading entries will be added here -->
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 mt-6">
+                <button onclick="addReading()" class="w-full sm:w-auto flex-grow justify-center items-center px-6 py-3 border border-indigo-200 text-base font-medium rounded-lg text-indigo-700 bg-white/50 hover:bg-white/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300">
+                    + Add Reading
+                </button>
+                <button onclick="calculateAverage()" class="w-full sm:w-auto flex-grow justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300">
+                    Calculate
+                </button>
+            </div>
+        </main>
+
+        <!-- Results Section -->
+        <div id="results-container" class="mt-8"></div>
+        <div id="gemini-container" class="mt-8"></div>
+
+    </div>
+
+    <script>
+        let readingCount = 0;
+        let lastCalculationResults = null;
+
+        /**
+         * Adds a new set of input fields for a date and kWh reading.
+         */
+        function addReading() {
+            readingCount++;
+            const readingsContainer = document.getElementById('readings-container');
+            
+            const newReadingDiv = document.createElement('div');
+            newReadingDiv.className = 'reading-entry grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 items-end animated-card';
+            
+            newReadingDiv.innerHTML = `
+                <div>
+                    <label for="date-${readingCount}" class="block text-sm font-medium text-gray-700 mb-1">Reading Date #${readingCount}</label>
+                    <input type="date" id="date-${readingCount}" class="date-input w-full p-3 bg-white/70 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition">
+                </div>
+                <div>
+                    <label for="kwh-${readingCount}" class="block text-sm font-medium text-gray-700 mb-1">kWh Reading</label>
+                    <input type="number" id="kwh-${readingCount}" class="kwh-input w-full p-3 bg-white/70 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition" placeholder="e.g., 15000">
+                </div>
+            `;
+            
+            readingsContainer.appendChild(newReadingDiv);
+            // Trigger animation
+            setTimeout(() => newReadingDiv.classList.add('show'), 10);
+        }
+        
+        // Add the first two reading fields on page load
+        window.onload = () => {
+            addReading();
+            addReading();
+        };
+
+        /**
+         * Gathers data, calculates, and displays the average electricity usage.
+         */
+        function calculateAverage() {
+            const readingEntries = document.querySelectorAll('.reading-entry');
+            const resultsContainer = document.getElementById('results-container');
+            const geminiContainer = document.getElementById('gemini-container');
+            resultsContainer.innerHTML = ''; 
+            geminiContainer.innerHTML = '';
+
+            let readings = [];
+            let hasError = false;
+
+            readingEntries.forEach((entry) => {
+                const dateInput = entry.querySelector('.date-input');
+                const kwhInput = entry.querySelector('.kwh-input');
+                dateInput.classList.remove('border-red-500');
+                kwhInput.classList.remove('border-red-500');
+
+                const date = dateInput.value;
+                const kwh = kwhInput.value;
+
+                if (!date || !kwh) {
+                    if (!date) dateInput.classList.add('border-red-500');
+                    if (!kwh) kwhInput.classList.add('border-red-500');
+                    hasError = true;
+                } else {
+                    readings.push({ date: new Date(date), kwh: parseFloat(kwh) });
+                }
+            });
+
+            if (hasError) {
+                displayMessage('Please fill in all fields.', 'error');
+                return;
+            }
+            if (readings.length < 2) {
+                displayMessage('Please enter at least two readings.', 'error');
+                return;
+            }
+
+            readings.sort((a, b) => a.date - b.date);
+            const firstReading = readings[0];
+            const lastReading = readings[readings.length - 1];
+            const totalKwhUsed = lastReading.kwh - firstReading.kwh;
+            const timeDifference = lastReading.date.getTime() - firstReading.date.getTime();
+            const totalDays = timeDifference / (1000 * 3600 * 24);
+
+            if (totalDays <= 0 || totalKwhUsed < 0) {
+                 displayMessage('Dates or kWh values are illogical. The last reading must be later and higher than the first.', 'error');
+                 return;
+            }
+            
+            const avgKwhPerDay = totalKwhUsed / totalDays;
+            const avgDaysInMonth = 365.25 / 12;
+            const avgKwhPerMonth = avgKwhPerDay * avgDaysInMonth;
+            const avgKwhPerYear = avgKwhPerDay * 365.25;
+            
+            lastCalculationResults = { daily: avgKwhPerDay, monthly: avgKwhPerMonth, yearly: avgKwhPerYear };
+            displayResults(lastCalculationResults);
+        }
+
+        /**
+         * Displays the calculated results with reactive coloring.
+         * @param {object} results - The calculated average usages.
+         */
+        function displayResults(results) {
+            const resultsContainer = document.getElementById('results-container');
+            const resultCard = document.createElement('div');
+            
+            let usageClass = 'usage-medium';
+            let usageText = 'Medium Usage';
+            let usageIcon = '⚠️';
+            if (results.monthly < 250) {
+                usageClass = 'usage-low';
+                usageText = 'Low Usage';
+                usageIcon = '✅';
+            } else if (results.monthly > 600) {
+                usageClass = 'usage-high';
+                usageText = 'High Usage';
+                usageIcon = '⚡️';
+            }
+            
+            resultCard.className = `animated-card glass-card p-6 sm:p-8 rounded-2xl shadow-lg border-l-4 ${usageClass}`;
+            
+            resultCard.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Your Averages</h2>
+                    <div class="text-right">
+                        <span class="font-semibold ${usageClass.replace('usage-', 'text-')}">${usageText}</span>
+                        <span class="text-xl ml-2">${usageIcon}</span>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center p-3 bg-white/50 rounded-lg">
+                        <span class="font-medium text-gray-600">Monthly</span>
+                        <span class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">${results.monthly.toFixed(2)} kWh</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 bg-white/50 rounded-lg">
+                        <span class="font-medium text-gray-600">Yearly</span>
+                        <span class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">${results.yearly.toFixed(2)} kWh</span>
+                    </div>
+                </div>
+                <div class="mt-6 text-center">
+                    <button onclick="getSavingTips()" class="w-full sm:w-auto justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-green-500 to-teal-500 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300">
+                        ✨ Get AI Saving Tips
+                    </button>
+                </div>
+            `;
+            resultsContainer.appendChild(resultCard);
+            setTimeout(() => resultCard.classList.add('show'), 10);
+        }
+
+        /**
+         * Fetches and displays energy saving tips from the Gemini API.
+         */
+        async function getSavingTips() {
+            if (!lastCalculationResults) {
+                displayMessage('Please calculate your average usage first.', 'error', 'gemini-container');
+                return;
+            }
+
+            const geminiContainer = document.getElementById('gemini-container');
+            geminiContainer.innerHTML = '<div class="loader"></div>';
+
+            const { monthly, yearly } = lastCalculationResults;
+            const prompt = `My average electricity consumption is ${monthly.toFixed(2)} kWh per month (${yearly.toFixed(2)} kWh per year). Based on this usage, provide a few actionable and personalized energy-saving tips. Make them easy to understand. Format the response as a simple list.`;
+
+            try {
+                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+                const apiKey = ""; // Handled by environment
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error(`API error: ${response.status}`);
+
+                const result = await response.json();
+                
+                if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    displayGeminiResponse(text);
+                } else {
+                    throw new Error('Unexpected API response structure.');
+                }
+            } catch (error) {
+                console.error('Error fetching Gemini tips:', error);
+                displayMessage('Sorry, couldn\'t fetch AI tips. Please try again.', 'error', 'gemini-container');
+            }
+        }
+        
+        /**
+         * Displays the response from the Gemini API.
+         * @param {string} text - The text response from the API.
+         */
+        function displayGeminiResponse(text) {
+            const geminiContainer = document.getElementById('gemini-container');
+            geminiContainer.innerHTML = '';
+
+            const geminiCard = document.createElement('div');
+            geminiCard.className = 'animated-card glass-card p-6 sm:p-8 rounded-2xl shadow-lg';
+            
+            const formattedText = text
+                .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-purple-800">$1</strong>')
+                .replace(/^\* (.*?)$/gm, '<li class="flex items-start mb-3"><span class="text-green-500 mr-3 mt-1">✓</span><span>$1</span></li>');
+
+            geminiCard.innerHTML = `
+                <h3 class="text-2xl font-bold text-gray-900 mb-4 text-center">AI-Powered Suggestions</h3>
+                <ul class="text-gray-700 space-y-2">${formattedText}</ul>
+            `;
+
+            geminiContainer.appendChild(geminiCard);
+            setTimeout(() => geminiCard.classList.add('show'), 10);
+        }
+
+        /**
+         * Displays a message (e.g., an error) to the user.
+         * @param {string} message - The text to display.
+         * @param {string} type - The type of message ('error' or 'info').
+         * @param {string} containerId - The ID of the container to display the message in.
+         */
+        function displayMessage(message, type = 'info', containerId = 'results-container') {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            const messageDiv = document.createElement('div');
+            const colorClass = type === 'error' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700';
+
+            messageDiv.className = `animated-card p-4 rounded-lg shadow-md ${colorClass}`;
+            messageDiv.textContent = message;
+            container.appendChild(messageDiv);
+
+            setTimeout(() => messageDiv.classList.add('show'), 10);
+        }
+    </script>
+</body>
+</html>
