@@ -26,13 +26,13 @@ export class ResultsComponent {
                     <div class="space-y-3">
                         <div class="flex justify-between items-center p-3 bg-white/50 rounded-lg">
                             <span class="font-medium text-gray-600">Monthly</span>
-                            <span class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">
+                            <span class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600">
                                 ${this.results.monthly.toFixed(2)} kWh
                             </span>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-white/50 rounded-lg">
                             <span class="font-medium text-gray-600">Yearly</span>
-                            <span class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">
+                            <span class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600">
                                 ${this.results.yearly.toFixed(2)} kWh
                             </span>
                         </div>
@@ -40,7 +40,7 @@ export class ResultsComponent {
                     <div class="mt-6 text-center">
                         <button 
                             data-action="get-tips"
-                            class="w-full sm:w-auto justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-green-500 to-teal-500 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-300"
+                            class="w-full sm:w-auto justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-yellow-500 to-orange-500 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-all duration-300"
                         >
                             ✨ Get AI Saving Tips
                         </button>

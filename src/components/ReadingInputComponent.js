@@ -13,7 +13,7 @@ export class ReadingInputComponent {
                     <input 
                         type="date" 
                         id="date-${this.reading.id}" 
-                        class="date-input w-full p-3 bg-white/70 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"
+                        class="date-input w-full p-3 bg-white/90 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition text-gray-900 placeholder-gray-600"
                         value="${this.reading.date}"
                     >
                 </div>
@@ -24,7 +24,7 @@ export class ReadingInputComponent {
                     <input 
                         type="number" 
                         id="kwh-${this.reading.id}" 
-                        class="kwh-input w-full p-3 bg-white/70 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition" 
+                        class="kwh-input w-full p-3 bg-white/90 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition text-gray-900 placeholder-gray-600" 
                         placeholder="e.g., 15000"
                         value="${this.reading.kwh}"
                     >
