@@ -5,6 +5,9 @@ export class ReadingManager {
     }
 
     addReading() {
+        // Preserve current input values before adding new reading
+        this.preserveCurrentValues();
+        
         this.readingCount++;
         const reading = {
             id: this.readingCount,
@@ -13,6 +16,21 @@ export class ReadingManager {
         };
         this.readings.push(reading);
         return reading;
+    }
+
+    preserveCurrentValues() {
+        // Update readings array with current DOM values
+        this.readings.forEach(reading => {
+            const dateInput = document.getElementById(`date-${reading.id}`);
+            const kwhInput = document.getElementById(`kwh-${reading.id}`);
+            
+            if (dateInput) {
+                reading.date = dateInput.value;
+            }
+            if (kwhInput) {
+                reading.kwh = kwhInput.value;
+            }
+        });
     }
 
     getReadings() {
