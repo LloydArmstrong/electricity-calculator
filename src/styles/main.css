@@ -1,0 +1,64 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Glass morphism effect */
+.glass-card {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Animation classes */
+.animated-card {
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transform: translateY(30px);
+    opacity: 0;
+}
+
+.animated-card.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Loading spinner */
+.loader {
+    border: 4px solid rgba(255,255,255,0.3);
+    border-top: 4px solid #818cf8;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Usage level indicators */
+.usage-low { 
+    border-left-color: #22c55e; 
+}
+
+.usage-medium { 
+    border-left-color: #f59e0b; 
+}
+
+.usage-high { 
+    border-left-color: #ef4444; 
+}
+
+.text-low {
+    color: #22c55e;
+}
+
+.text-medium {
+    color: #f59e0b;
+}
+
+.text-high {
+    color: #ef4444;
+}
