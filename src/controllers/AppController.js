@@ -5,6 +5,7 @@ import { HeaderComponent } from '../components/HeaderComponent.js';
 import { MainFormComponent } from '../components/MainFormComponent.js';
 import { ResultsComponent } from '../components/ResultsComponent.js';
 import { MessageComponent } from '../components/MessageComponent.js';
+import { LightRaysComponent } from '../components/LightRaysComponent.js';
 
 export class AppController {
     constructor(renderer) {
@@ -13,6 +14,7 @@ export class AppController {
         this.calculationService = new CalculationService();
         this.geminiService = new GeminiService();
         this.lastCalculationResults = null;
+        this.lightRays = null;
         
         // Bind methods to maintain context
         this.handleAddReading = this.handleAddReading.bind(this);
@@ -27,6 +29,37 @@ export class AppController {
         this.readingManager.addReading();
         this.readingManager.addReading();
         this.render();
+        this.initializeLightRays();
+    }
+
+    initializeLightRays() {
+        // Create a background container for light rays
+        const lightRaysContainer = document.createElement('div');
+        lightRaysContainer.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        `;
+        document.body.appendChild(lightRaysContainer);
+
+        this.lightRays = new LightRaysComponent({
+            raysOrigin: "top-center",
+            raysColor: "#818cf8",
+            raysSpeed: 1.2,
+            lightSpread: 0.6,
+            rayLength: 1.5,
+            followMouse: true,
+            mouseInfluence: 0.08,
+            noiseAmount: 0.05,
+            distortion: 0.02,
+            className: "custom-rays"
+        });
+
+        this.lightRays.mount(lightRaysContainer);
     }
 
     setupEventListeners() {
