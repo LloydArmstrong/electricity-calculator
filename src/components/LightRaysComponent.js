@@ -9,7 +9,7 @@ export class LightRaysComponent {
             lightSpread: options.lightSpread || 1.2,
             rayLength: options.rayLength || 3,
             pulsating: options.pulsating || false,
-            fadeDistance: options.fadeDistance || 1.8,
+            fadeDistance: options.fadeDistance || 2.6,
             saturation: options.saturation || 1.0,
             followMouse: options.followMouse || true,
             mouseInfluence: options.mouseInfluence || 0.6,
