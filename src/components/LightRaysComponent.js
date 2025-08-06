@@ -12,7 +12,7 @@ export class LightRaysComponent {
             fadeDistance: options.fadeDistance || 1.8,
             saturation: options.saturation || 1.0,
             followMouse: options.followMouse || true,
-            mouseInfluence: options.mouseInfluence || 0.1,
+            mouseInfluence: options.mouseInfluence || 0.6,
             noiseAmount: options.noiseAmount || 0.0,
             distortion: options.distortion || 0.0,
             className: options.className || ""
