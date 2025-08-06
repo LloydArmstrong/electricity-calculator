@@ -27,7 +27,7 @@ export class FooterComponent {
                             </a>
                             
                             <a 
-                                href="https://linkedin.com/in/lloydarmstrong" 
+                                href="https://linkedin.com/in/lloyd-armstrong" 
                                 target="_blank" 
                                 rel="noopener noreferrer"
                                 class="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-300 hover:scale-105 hover:shadow-lg"
