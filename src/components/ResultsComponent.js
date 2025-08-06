@@ -37,14 +37,6 @@ export class ResultsComponent {
                             </span>
                         </div>
                     </div>
-                    <div class="mt-6 text-center">
-                        <button 
-                            data-action="get-tips"
-                            class="w-full sm:w-auto justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-yellow-500 to-orange-500 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-all duration-300"
-                        >
-                            ✨ Get AI Saving Tips
-                        </button>
-                    </div>
                 </div>
             </div>
         `;
