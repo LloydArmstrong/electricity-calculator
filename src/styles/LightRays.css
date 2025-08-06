@@ -1,0 +1,59 @@
+/* Light Rays Component Styles */
+.light-rays-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  pointer-events: none;
+  z-index: 3;
+  overflow: hidden;
+}
+
+.light-rays-container canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  mix-blend-mode: screen;
+  opacity: 0.8;
+}
+
+/* Custom rays styling */
+.custom-rays {
+  border-radius: 12px;
+}
+
+.custom-rays canvas {
+  border-radius: inherit;
+}
+
+/* Performance optimizations */
+.light-rays-container canvas {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .light-rays-container canvas {
+    opacity: 0.6;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-reduced-motion: reduce) {
+  .light-rays-container canvas {
+    animation: none;
+    opacity: 0.3;
+  }
+}
+
+/* Dark mode compatibility */
+@media (prefers-color-scheme: dark) {
+  .light-rays-container canvas {
+    mix-blend-mode: plus-lighter;
+    opacity: 0.9;
+  }
+}
