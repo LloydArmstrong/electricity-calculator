@@ -9,3 +9,5 @@ document.addEventListener('DOMContentLoaded', () => {
     const app = new AppController(renderer);
     
     app.initialize();
+}
+)
