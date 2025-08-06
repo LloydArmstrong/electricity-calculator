@@ -48,7 +48,7 @@ export class AppController {
 
         this.lightRays = new LightRaysComponent({
             raysOrigin: "top-center",
-            raysColor: "#818cf8",
+            raysColor: "#ffffff",
             raysSpeed: 1.2,
             lightSpread: 0.6,
             rayLength: 1.5,
