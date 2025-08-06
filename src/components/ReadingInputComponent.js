@@ -6,9 +6,22 @@ export class ReadingInputComponent {
     render() {
         return `
             <div class="reading-entry grid grid-cols-1 gap-4 mb-6 items-end animated-card show">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-lg font-semibold text-gray-800">Reading #${this.reading.id}</h3>
+                    <button 
+                        data-action="delete-reading" 
+                        data-reading-id="${this.reading.id}"
+                        class="flex items-center justify-center w-8 h-8 bg-red-100 hover:bg-red-200 active:bg-red-300 text-red-600 rounded-full transition-all duration-200 touch-manipulation"
+                        title="Delete this reading"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
                 <div>
                     <label for="date-${this.reading.id}" class="block text-sm font-medium text-gray-700 mb-1">
-                        Reading Date #${this.reading.id}
+                        Reading Date
                     </label>
                     <input 
                         type="date" 

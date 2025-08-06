@@ -67,6 +67,8 @@ export class AppController {
                 this.handleAddReading();
             } else if (e.target.matches('[data-action="calculate"]')) {
                 this.handleCalculate();
+            } else if (e.target.matches('[data-action="delete-reading"]')) {
+                this.handleDeleteReading(e.target.dataset.readingId);
             }
         });
     }
@@ -76,18 +78,30 @@ export class AppController {
         this.render();
     }
 
+    handleDeleteReading(readingId) {
+        // Don't allow deleting if only one reading remains
+        if (this.readingManager.readings.length <= 1) {
+            this.showMessage('You must have at least one reading.', 'error');
+            return;
+        }
+        
+        this.readingManager.preserveCurrentValues();
+        this.readingManager.deleteReading(readingId);
+        this.render();
+    }
+
     async handleCalculate() {
         const readings = this.readingManager.getReadings();
         const validation = this.readingManager.validateReadings(readings);
         
         if (!validation.isValid) {
             this.showMessage(validation.message, 'error');
-            this.readingManager.highlightErrors(validation.errors);
             return;
         }
 
         try {
-            this.lastCalculationResults = this.calculationService.calculateAverages(readings);
+            // Use only complete readings for calculation
+            this.lastCalculationResults = this.calculationService.calculateAverages(validation.completeReadings);
             this.render();
         } catch (error) {
             this.showMessage(error.message, 'error');
