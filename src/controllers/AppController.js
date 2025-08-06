@@ -6,6 +6,7 @@ import { MainFormComponent } from '../components/MainFormComponent.js';
 import { ResultsComponent } from '../components/ResultsComponent.js';
 import { MessageComponent } from '../components/MessageComponent.js';
 import { LightRaysComponent } from '../components/LightRaysComponent.js';
+import { FooterComponent } from '../components/FooterComponent.js';
 
 export class AppController {
     constructor(renderer) {
@@ -118,6 +119,7 @@ export class AppController {
         const headerComponent = new HeaderComponent();
         const mainFormComponent = new MainFormComponent(this.readingManager.readings);
         const resultsComponent = new ResultsComponent(this.lastCalculationResults);
+        const footerComponent = new FooterComponent();
 
         const appHTML = `
             <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-2xl">
@@ -125,6 +127,7 @@ export class AppController {
                 ${mainFormComponent.render()}
                 ${resultsComponent.render()}
                 <div id="tips-container" class="mt-8"></div>
+                ${footerComponent.render()}
             </div>
         `;
 
