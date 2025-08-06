@@ -6,7 +6,7 @@ export class LightRaysComponent {
             raysOrigin: options.raysOrigin || "top-center",
             raysColor: options.raysColor || "#ffffff",
             raysSpeed: options.raysSpeed || 1,
-            lightSpread: options.lightSpread || 1.2,
+            lightSpread: options.lightSpread || 1.8,
             rayLength: options.rayLength || 3,
             pulsating: options.pulsating || false,
             fadeDistance: options.fadeDistance || 2.6,
