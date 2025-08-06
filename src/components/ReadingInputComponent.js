@@ -5,7 +5,7 @@ export class ReadingInputComponent {
 
     render() {
         return `
-            <div class="reading-entry grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4 items-end animated-card show">
+            <div class="reading-entry grid grid-cols-1 gap-4 mb-6 items-end animated-card show">
                 <div>
                     <label for="date-${this.reading.id}" class="block text-sm font-medium text-gray-700 mb-1">
                         Reading Date #${this.reading.id}
@@ -13,7 +13,7 @@ export class ReadingInputComponent {
                     <input 
                         type="date" 
                         id="date-${this.reading.id}" 
-                        class="date-input w-full p-3 bg-white/90 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition text-gray-900 placeholder-gray-600"
+                        class="date-input w-full p-4 text-lg bg-white/90 border-2 border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition text-gray-900 placeholder-gray-600 touch-manipulation"
                         value="${this.reading.date}"
                     >
                 </div>
@@ -24,9 +24,10 @@ export class ReadingInputComponent {
                     <input 
                         type="number" 
                         id="kwh-${this.reading.id}" 
-                        class="kwh-input w-full p-3 bg-white/90 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition text-gray-900 placeholder-gray-600" 
+                        class="kwh-input w-full p-4 text-lg bg-white/90 border-2 border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition text-gray-900 placeholder-gray-600 touch-manipulation" 
                         placeholder="e.g., 15000"
                         value="${this.reading.kwh}"
+                        inputmode="numeric"
                     >
                 </div>
             </div>

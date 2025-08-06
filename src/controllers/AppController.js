@@ -101,11 +101,15 @@ export class AppController {
         const footerComponent = new FooterComponent();
 
         const appHTML = `
-            <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-2xl">
+            <div class="container mx-auto p-3 sm:p-4 md:p-6 lg:p-8 max-w-2xl min-h-screen flex flex-col">
                 ${headerComponent.render()}
-                ${mainFormComponent.render()}
-                ${resultsComponent.render()}
-                ${footerComponent.render()}
+                <div class="flex-grow">
+                    ${mainFormComponent.render()}
+                    ${resultsComponent.render()}
+                </div>
+                <div class="mt-auto">
+                    ${footerComponent.render()}
+                </div>
             </div>
         `;
 

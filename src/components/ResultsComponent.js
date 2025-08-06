@@ -15,24 +15,24 @@ export class ResultsComponent {
 
         return `
             <div id="results-container" class="mt-8">
-                <div class="animated-card glass-card p-6 sm:p-8 rounded-2xl shadow-lg border-l-4 ${usageLevel.class} show">
+                <div class="animated-card glass-card p-4 sm:p-6 md:p-8 rounded-2xl shadow-lg border-l-4 ${usageLevel.class} show">
                     <div class="flex justify-between items-start">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Your Averages</h2>
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Your Averages</h2>
                         <div class="text-right">
                             <span class="font-semibold ${usageLevel.textClass}">${usageLevel.text}</span>
                             <span class="text-xl ml-2">${usageLevel.icon}</span>
                         </div>
                     </div>
-                    <div class="space-y-3">
+                    <div class="space-y-4">
                         <div class="flex justify-between items-center p-3 bg-white/50 rounded-lg">
-                            <span class="font-medium text-gray-600">Monthly</span>
-                            <span class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600">
+                            <span class="font-medium text-gray-600 text-sm sm:text-base">Monthly</span>
+                            <span class="text-lg sm:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600">
                                 ${this.results.monthly.toFixed(2)} kWh
                             </span>
                         </div>
                         <div class="flex justify-between items-center p-3 bg-white/50 rounded-lg">
-                            <span class="font-medium text-gray-600">Yearly</span>
-                            <span class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600">
+                            <span class="font-medium text-gray-600 text-sm sm:text-base">Yearly</span>
+                            <span class="text-lg sm:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-orange-600">
                                 ${this.results.yearly.toFixed(2)} kWh
                             </span>
                         </div>

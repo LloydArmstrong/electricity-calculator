@@ -1,5 +1,35 @@
 body {
     font-family: 'Inter', sans-serif;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Touch-friendly interactions */
+.touch-manipulation {
+    touch-action: manipulation;
+}
+
+/* Improved mobile input styling */
+input[type="date"], input[type="number"] {
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Better focus states for mobile */
+input:focus, button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.3);
+}
+
+/* Active states for better touch feedback */
+button:active {
+    transform: scale(0.98);
 }
 
 /* Glass morphism effect */
@@ -36,6 +66,40 @@ body {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 640px) {
+    .glass-card {
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+    
+    /* Reduce light rays intensity on mobile for better performance */
+    .light-rays-container canvas {
+        opacity: 0.3;
+    }
+    
+    /* Ensure minimum touch target size */
+    button, input {
+        min-height: 44px;
+    }
+}
+
+/* Landscape mobile adjustments */
+@media (max-width: 896px) and (orientation: landscape) {
+    .container {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+    
+    header {
+        margin-bottom: 1.5rem;
+    }
+    
+    footer {
+        margin-top: 2rem;
+    }
 }
 
 /* Usage level indicators */

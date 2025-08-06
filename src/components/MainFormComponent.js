@@ -14,7 +14,7 @@ export class MainFormComponent {
         const actionButtons = new ActionButtonsComponent().render();
 
         return `
-            <main class="glass-card p-6 sm:p-8 rounded-2xl shadow-xl">
+            <main class="glass-card p-4 sm:p-6 md:p-8 rounded-2xl shadow-xl">
                 <div id="readings-container">
                     ${readingInputs}
                 </div>

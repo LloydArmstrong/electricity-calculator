@@ -2,10 +2,10 @@ export class HeaderComponent {
     render() {
         return `
             <header class="text-center mb-10">
-                <h1 class="text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 leading-tight pb-2">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 leading-tight pb-2">
                     Electricity Calculator
                 </h1>
-                <p class="text-gray-400 mt-3">Calculate your average electricity usage from meter readings.</p>
+                <p class="text-gray-400 mt-3 text-base sm:text-lg px-4">Calculate your average electricity usage from meter readings.</p>
             </header>
         `;
     }
